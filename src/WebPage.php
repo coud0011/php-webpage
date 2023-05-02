@@ -58,7 +58,7 @@ class WebPage
      */
     public function appendToHead(string $content)
     {
-        $this->head .= "\n$content";
+        $this->head .= "$content";
     }
 
     /**
@@ -78,7 +78,7 @@ class WebPage
      */
     public function appendCssUrl(string $url)
     {
-        $this->appendToHead("<link href:'$url' rel:'stylesheet' type:'text/css'>");
+        $this->appendToHead("<link rel='stylesheet' type='text/css' href='$url'>");
     }
 
     /**
@@ -108,7 +108,7 @@ class WebPage
      */
     public function appendContent(string $content)
     {
-        $this->body .= "\n$content";
+        $this->body .= "$content";
     }
 
     /**
@@ -117,17 +117,34 @@ class WebPage
      */
     public function toHTML(): string
     {
+        $date=WebPage::getLastModification();
+        $css= <<<CSS
+            footer
+            {
+                display:flex;
+            }
+            DateModif
+            {
+                font-style: italic;
+                font-size: small;
+            }
+        CSS;
         $html= <<<HTML
         <!DOCTYPE html>
-        <html>
+        <html lang="fr">
             <head>
                 <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
                 $this->head
+                <style>$css</style>
             <title>$this->title</title>
             </head>
             <body>
                 $this->body
             </body>
+            <footer>
+                <DateModif>Dernière modification de cette page le $date</DateModif>
+            </footer>
         </html>
         HTML;
         return $html;
@@ -158,7 +175,8 @@ class WebPage
         }
         else
         {
-            $res=date ("f d Y H:i:s", getlastmod());
+            $res=date ("d/m/Y \à H:i:s", getlastmod());
         }
+        return $res;
     }
 }
