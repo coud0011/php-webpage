@@ -133,8 +133,32 @@ class WebPage
         return $html;
     }
 
+    /**
+     * Méthode escapeString, permet de modifier la chaîne de caractère passée en paramètre
+     * Pour enlever tous les caractères pouvant nuire à la page html
+     *
+     * @param string $string
+     * @return string
+     */
     public function escapeString(string $string):string
     {
         return htmlspecialchars($string,  ENT_QUOTES | ENT_IGNORE | ENT_HTML5);
+    }
+
+    /**
+     * Méthode Statique renvoyant la date de dernière modification du script principale
+     * @return string
+     */
+    public static function getLastModification():string
+    {
+        $LastModif=getlastmod();
+        if ($LastModif==False)
+        {
+            $res="Erreur!";
+        }
+        else
+        {
+            $res=date ("f d Y H:i:s", getlastmod());
+        }
     }
 }
